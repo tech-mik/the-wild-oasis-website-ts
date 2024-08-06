@@ -206,7 +206,7 @@ export async function updateGuest(
 
   if (error) {
     console.error(error)
-    throw new Error('Guest could not be updated')
+    throw new Error('Guest could not be updated (data-service)')
   }
   return data
 }

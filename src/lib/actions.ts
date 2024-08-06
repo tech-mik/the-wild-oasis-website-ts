@@ -1,13 +1,12 @@
 'use server'
 
 import { auth, signIn, signOut } from '@/auth'
-import { supabase } from './supabase'
+import { Database } from '@/types/supabase'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { getBookings } from './data-service'
 import { wait } from './helpers'
-import { redirect } from 'next/navigation'
-import { Database } from '@/types/supabase'
-import { error } from 'console'
+import { supabase } from './supabase'
 
 export async function updateGuest(formData: FormData) {
   const session = await auth()
@@ -17,8 +16,6 @@ export async function updateGuest(formData: FormData) {
   const FDnationalID: string = formData.get('nationalID') as string
   const FDnationality: string = formData.get('nationality') as string
 
-  if (!FDnationalID && FDnationalID !== '')
-    throw new Error('Please provide a valid national ID')
   if (!FDnationality && FDnationality !== '')
     throw new Error('Please provide a valid nationality')
 
@@ -28,7 +25,7 @@ export async function updateGuest(formData: FormData) {
     throw new Error('Please provide a valid national ID')
   }
 
-  const updateData = { nationality, countryFlag, FDnationalID }
+  const updateData = { nationality, countryFlag, nationalID: FDnationalID }
 
   const { data, error } = await supabase
     .from('guests')
@@ -39,7 +36,7 @@ export async function updateGuest(formData: FormData) {
 
   if (error) {
     console.error(error)
-    throw new Error('Guest could not be updated')
+    throw new Error('Guest could not be updated (action)')
   }
 
   revalidatePath('/account/profile')
