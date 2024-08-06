@@ -39,7 +39,7 @@ function ReservationForm({ cabin, user }: IReservarionForm) {
     numNights,
     cabinPrice,
     cabinId,
-  }
+  } as unknown as Database['public']['Tables']['bookings']['Insert']
 
   return (
     <div className='scale-[1.01]'>

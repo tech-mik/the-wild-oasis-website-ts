@@ -15,7 +15,7 @@ export default function UpdateProfileForm({
   SelectCountry,
   guest,
 }: IUpdateProfileFormProps) {
-  const { fullName, email, nationality, nationalID, countryFlag } = guest
+  const { fullName, email, nationalID, countryFlag } = guest
 
   return (
     <form

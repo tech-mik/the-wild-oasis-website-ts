@@ -1,7 +1,7 @@
 import { getCountries } from '@/lib/data-service'
 
 interface ISelectCountryProps {
-  defaultCountry: string
+  defaultCountry: string | null | undefined
   name: string
   id: string
   className: string

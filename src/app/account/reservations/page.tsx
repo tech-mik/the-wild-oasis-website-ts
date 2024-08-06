@@ -1,5 +1,5 @@
 import { auth } from '@/auth'
-import ReservationList from '@/components/ReservationList'
+import ReservationList, { ExtendedBooking } from '@/components/ReservationList' // ADD THIS LINE
 import { getBookings } from '@/lib/data-service'
 import Link from 'next/link'
 
@@ -8,7 +8,6 @@ export const metadata = {
 }
 
 export default async function Page() {
-  // CHANGE
   const session = await auth()
   const bookings = await getBookings(session?.user.guestId!)
 
@@ -26,7 +25,7 @@ export default async function Page() {
           </Link>
         </p>
       ) : (
-        <ReservationList bookings={bookings} />
+        <ReservationList bookings={bookings as ExtendedBooking[]} />
       )}
     </div>
   )

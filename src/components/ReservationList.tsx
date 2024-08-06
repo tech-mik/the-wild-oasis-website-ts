@@ -10,9 +10,10 @@ interface Cabin {
   image: string
 }
 
-type ExtendedBooking = Database['public']['Tables']['bookings']['Row'] & {
-  cabins: Cabin
-}
+export type ExtendedBooking =
+  Database['public']['Tables']['bookings']['Row'] & {
+    cabins: Cabin
+  }
 
 interface IReservationListProps {
   bookings: ExtendedBooking[]

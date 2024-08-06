@@ -5,10 +5,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Database } from '@/types/supabase'
 
+interface Cabin {
+  name: string
+  image: string
+}
+
+type ExtendedBooking = Database['public']['Tables']['bookings']['Row'] & {
+  cabins: Cabin
+}
+
 interface IReservationCardProps {
-  booking: Database['public']['Tables']['bookings']['Row'] & {
-    cabins: { name: string; image: string }
-  }
+  booking: ExtendedBooking
   onDelete: (bookingId: number) => Promise<void>
   resetError: () => void
 }

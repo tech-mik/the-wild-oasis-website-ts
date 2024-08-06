@@ -2,6 +2,7 @@ import { auth } from '@/auth'
 import SelectCountry from '@/components/SelectCountry'
 import UpdateProfileForm from '@/components/UpdateProfileForm'
 import { getGuest } from '@/lib/data-service'
+import { Database } from '@/types/supabase'
 
 export const metadata = {
   title: 'Update Profile',
@@ -24,7 +25,7 @@ export default async function Page() {
         faster and smoother. See you soon!
       </p>
       <UpdateProfileForm
-        guest={guest}
+        guest={guest as Database['public']['Tables']['guests']['Row']}
         SelectCountry={
           <SelectCountry
             name='nationality'

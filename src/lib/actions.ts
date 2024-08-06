@@ -6,20 +6,29 @@ import { revalidatePath } from 'next/cache'
 import { getBookings } from './data-service'
 import { wait } from './helpers'
 import { redirect } from 'next/navigation'
+import { Database } from '@/types/supabase'
+import { error } from 'console'
 
-export async function updateGuest(formData) {
+export async function updateGuest(formData: FormData) {
   const session = await auth()
 
   if (!session) throw new Error('You must be logged in')
 
-  const nationalID = formData.get('nationalID')
-  const [nationality, countryFlag] = formData.get('nationality').split('%')
+  const FDnationalID: string = formData.get('nationalID') as string
+  const FDnationality: string = formData.get('nationality') as string
 
-  if (!/^[a-zA-Z0-9]{6,12}$/.test(nationalID)) {
+  if (!FDnationalID && FDnationalID !== '')
+    throw new Error('Please provide a valid national ID')
+  if (!FDnationality && FDnationality !== '')
+    throw new Error('Please provide a valid nationality')
+
+  const [nationality, countryFlag] = FDnationality.split('%')
+
+  if (!/^[a-zA-Z0-9]{6,12}$/.test(FDnationalID)) {
     throw new Error('Please provide a valid national ID')
   }
 
-  const updateData = { nationality, countryFlag, nationalID }
+  const updateData = { nationality, countryFlag, FDnationalID }
 
   const { data, error } = await supabase
     .from('guests')
@@ -48,21 +57,27 @@ export async function signOutAction() {
 ////////////////////////////////////////////
 // Booking actions
 
-export async function createBooking(bookingData, formData) {
+export async function createBooking(
+  bookingData: Database['public']['Tables']['bookings']['Insert'],
+  formData: FormData,
+) {
   const session = await auth()
   if (!session) throw new Error('You must be logged in')
+  if (!formData) throw new Error('Form data is missing')
+  if (!formData.get('numGuests'))
+    throw new Error('Please provide the number of guests')
 
   const newBooking = {
     ...bookingData,
     guestId: session.user.guestId,
-    numGuests: +formData.get('numGuests'),
+    numGuests: Number(formData.get('numGuests')),
     observations: formData.get('observations'),
     extrasPrice: 0,
     totalPrice: bookingData.cabinPrice,
     status: 'unconfirmed',
     isPaid: false,
     hasBreakfast: false,
-  }
+  } as Database['public']['Tables']['bookings']['Insert']
 
   const { error } = await supabase
     .from('bookings')
@@ -79,16 +94,23 @@ export async function createBooking(bookingData, formData) {
   // redirect('/account/reservations')
 }
 
-export async function editBooking(formData) {
-  const bookingId = +formData.get('bookingId')
-  const numGuests = +formData.get('numGuests')
+export async function editBooking(formData: FormData) {
+  if (!formData) throw new Error('Form data is missing')
+  if (!formData.get('bookingId')) throw new Error('Booking ID is missing')
+  if (!formData.get('numGuests'))
+    throw new Error('Please provide the number of guests')
+  if (!formData.get('observations'))
+    throw new Error('Please provide the observations')
+
+  const bookingId = Number(formData.get('bookingId'))
+  const numGuests = Number(formData.get('numGuests'))
   const observations = formData.get('observations')
 
   const updatedFields = { numGuests, observations }
 
   const { error } = await supabase
     .from('bookings')
-    .update(updatedFields)
+    .update(updatedFields as Database['public']['Tables']['bookings']['Update'])
     .eq('id', bookingId)
 
   if (error) {
@@ -101,7 +123,7 @@ export async function editBooking(formData) {
   redirect('/account/reservations')
 }
 
-export async function deleteBooking(bookingId) {
+export async function deleteBooking(bookingId: number) {
   await wait(1)
 
   const session = await auth()
