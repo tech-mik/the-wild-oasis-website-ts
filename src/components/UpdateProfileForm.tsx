@@ -2,8 +2,8 @@
 
 import { updateGuest } from '@/lib/actions'
 import { Database } from '@/types/supabase'
+import { error } from 'console'
 import Image from 'next/image'
-import { useState } from 'react'
 import { useFormStatus } from 'react-dom'
 
 interface IUpdateProfileFormProps {
@@ -17,9 +17,19 @@ export default function UpdateProfileForm({
 }: IUpdateProfileFormProps) {
   const { fullName, email, nationalID, countryFlag } = guest
 
+  async function handleSubmit(formData: FormData) {
+    try {
+      const data = await updateGuest(formData)
+
+      console.log(data)
+    } catch (error) {
+      if (error instanceof Error) alert(error.message)
+    }
+  }
+
   return (
     <form
-      action={updateGuest}
+      action={handleSubmit}
       className='bg-primary-900 py-8 px-12 text-lg flex gap-6 flex-col'>
       <div className='space-y-2'>
         <label>Full name</label>
