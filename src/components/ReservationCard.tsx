@@ -3,13 +3,26 @@ import { format, formatDistance, isPast, isToday, parseISO } from 'date-fns'
 import DeleteReservation from './DeleteReservation'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Database } from '@/types/supabase'
 
-export const formatDistanceFromNow = (dateStr) =>
+interface IReservationCardProps {
+  booking: Database['public']['Tables']['bookings']['Row'] & {
+    cabins: { name: string; image: string }
+  }
+  onDelete: (bookingId: number) => Promise<void>
+  resetError: () => void
+}
+
+export const formatDistanceFromNow = (dateStr: string) =>
   formatDistance(parseISO(dateStr), new Date(), {
     addSuffix: true,
   }).replace('about ', '')
 
-function ReservationCard({ booking, onDelete, resetError }) {
+function ReservationCard({
+  booking,
+  onDelete,
+  resetError,
+}: IReservationCardProps) {
   const {
     id,
     guestId,

@@ -1,13 +1,34 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react'
+import { IDateRange } from '@/types/bookings'
+import React, {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+  ReactNode,
+} from 'react'
 
-const ReservationContext = createContext()
+interface IReservationContextProps {
+  range: IDateRange
+  setRange: Dispatch<SetStateAction<IDateRange>>
+  resetRange: () => void
+}
 
-const initialState = { from: undefined, to: undefined }
+const initialState: IDateRange = { from: null, to: null }
 
-function ReservationProvider({ children }) {
-  const [range, setRange] = useState(initialState)
+const ReservationContext = createContext<IReservationContextProps | undefined>(
+  undefined,
+)
+
+interface ReservationProviderProps {
+  children: ReactNode
+}
+
+const ReservationProvider = ({ children }: ReservationProviderProps) => {
+  const [range, setRange] = useState<IDateRange>(initialState)
+
   const resetRange = () => setRange(initialState)
 
   return (
@@ -16,7 +37,8 @@ function ReservationProvider({ children }) {
     </ReservationContext.Provider>
   )
 }
-function useReservation() {
+
+const useReservation = (): IReservationContextProps => {
   const context = useContext(ReservationContext)
 
   if (context === undefined) {
@@ -25,4 +47,5 @@ function useReservation() {
 
   return context
 }
+
 export { ReservationProvider, useReservation }

@@ -6,7 +6,13 @@ import SpinnerMini from './SpinnerMini'
 import Image from 'next/image'
 
 export default function User() {
-  const { user, loading } = useAuth()
+  const session = useAuth()
+
+  if (!session) {
+    throw new Error('Not authenticated')
+  }
+
+  const { user, loading } = session
 
   if (loading) return <SpinnerMini />
 
@@ -20,7 +26,7 @@ export default function User() {
             width={32}
             height={32}
             src={user.image}
-            alt={user.name}
+            alt={user.name || 'Unknown'}
             className='rounded-full'
             referrerPolicy='no-referrer'
           />

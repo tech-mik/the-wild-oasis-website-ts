@@ -1,12 +1,20 @@
 'use client'
 
 import { updateGuest } from '@/lib/actions'
+import { Database } from '@/types/supabase'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useFormStatus } from 'react-dom'
 
-export default function UpdateProfileForm({ SelectCountry, guest }) {
-  const [count, setCount] = useState(0)
+interface IUpdateProfileFormProps {
+  SelectCountry: JSX.Element
+  guest: Database['public']['Tables']['guests']['Row']
+}
+
+export default function UpdateProfileForm({
+  SelectCountry,
+  guest,
+}: IUpdateProfileFormProps) {
   const { fullName, email, nationality, nationalID, countryFlag } = guest
 
   return (
@@ -39,7 +47,7 @@ export default function UpdateProfileForm({ SelectCountry, guest }) {
           <Image
             width={20}
             height={20}
-            src={countryFlag}
+            src={countryFlag || '/flags/unknown.png'}
             alt='Country flag'
             className='rounded-sm'
           />
@@ -50,7 +58,7 @@ export default function UpdateProfileForm({ SelectCountry, guest }) {
       <div className='space-y-2'>
         <label htmlFor='nationalID'>National ID number</label>
         <input
-          defaultValue={nationalID}
+          defaultValue={nationalID || ''}
           name='nationalID'
           className='px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm'
         />

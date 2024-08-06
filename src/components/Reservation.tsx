@@ -3,8 +3,13 @@ import DateSelector from './DateSelector'
 import ReservationForm from './ReservationForm'
 import { auth } from '@/auth'
 import LoginMessage from './LoginMessage'
+import { Database } from '@/types/supabase'
 
-export default async function Reservation({ cabin }) {
+interface IReservationProps {
+  cabin: Database['public']['Tables']['cabins']['Row']
+}
+
+export default async function Reservation({ cabin }: IReservationProps) {
   const [settings, bookedDates] = await Promise.all([
     getSettings(),
     getBookedDatesByCabinId(cabin.id),

@@ -11,55 +11,55 @@ export type Database = {
     Tables: {
       bookings: {
         Row: {
-          cabinId: number | null
-          cabinPrice: number | null
+          cabinId: number
+          cabinPrice: number
           created_at: string
-          endDate: string | null
-          extrasPrice: number | null
-          guestId: number | null
-          hasBreakfast: boolean | null
+          endDate: string
+          extrasPrice: number
+          guestId: number
+          hasBreakfast: boolean
           id: number
-          isPaid: boolean | null
-          numGuests: number | null
-          numNights: number | null
-          observations: string | null
-          startDate: string | null
-          status: string | null
-          totalPrice: number | null
+          isPaid: boolean
+          numGuests: number
+          numNights: number
+          observations: string
+          startDate: string
+          status: string
+          totalPrice: number
         }
         Insert: {
-          cabinId?: number | null
-          cabinPrice?: number | null
+          cabinId: number
+          cabinPrice: number
           created_at?: string
-          endDate?: string | null
-          extrasPrice?: number | null
-          guestId?: number | null
-          hasBreakfast?: boolean | null
+          endDate: string
+          extrasPrice: number
+          guestId: number
+          hasBreakfast: boolean
           id?: number
-          isPaid?: boolean | null
-          numGuests?: number | null
-          numNights?: number | null
-          observations?: string | null
-          startDate?: string | null
-          status?: string | null
-          totalPrice?: number | null
+          isPaid: boolean
+          numGuests: number
+          numNights: number
+          observations: string
+          startDate: string
+          status: string
+          totalPrice: number
         }
         Update: {
-          cabinId?: number | null
-          cabinPrice?: number | null
+          cabinId?: number
+          cabinPrice?: number
           created_at?: string
-          endDate?: string | null
-          extrasPrice?: number | null
-          guestId?: number | null
-          hasBreakfast?: boolean | null
+          endDate?: string
+          extrasPrice?: number
+          guestId?: number
+          hasBreakfast?: boolean
           id?: number
-          isPaid?: boolean | null
-          numGuests?: number | null
-          numNights?: number | null
-          observations?: string | null
-          startDate?: string | null
-          status?: string | null
-          totalPrice?: number | null
+          isPaid?: boolean
+          numGuests?: number
+          numNights?: number
+          observations?: string
+          startDate?: string
+          status?: string
+          totalPrice?: number
         }
         Relationships: [
           {
@@ -81,36 +81,36 @@ export type Database = {
       cabins: {
         Row: {
           created_at: string
-          description: string | null
+          description: string
           discount: number | null
           id: number
-          image: string | null
-          imageThumbnail: string | null
-          maxCapacity: number | null
-          name: string | null
-          regularPrice: number | null
+          image: string
+          imageThumbnail: string
+          maxCapacity: number
+          name: string
+          regularPrice: number
         }
         Insert: {
           created_at?: string
-          description?: string | null
+          description: string
           discount?: number | null
           id?: number
-          image?: string | null
-          imageThumbnail?: string | null
-          maxCapacity?: number | null
-          name?: string | null
-          regularPrice?: number | null
+          image: string
+          imageThumbnail: string
+          maxCapacity: number
+          name: string
+          regularPrice: number
         }
         Update: {
           created_at?: string
-          description?: string | null
+          description?: string
           discount?: number | null
           id?: number
-          image?: string | null
-          imageThumbnail?: string | null
-          maxCapacity?: number | null
-          name?: string | null
-          regularPrice?: number | null
+          image?: string
+          imageThumbnail?: string
+          maxCapacity?: number
+          name?: string
+          regularPrice?: number
         }
         Relationships: []
       }
@@ -118,8 +118,8 @@ export type Database = {
         Row: {
           countryFlag: string | null
           created_at: string
-          email: string | null
-          fullName: string | null
+          email: string
+          fullName: string
           id: number
           nationalID: string | null
           nationality: string | null
@@ -127,8 +127,8 @@ export type Database = {
         Insert: {
           countryFlag?: string | null
           created_at?: string
-          email?: string | null
-          fullName?: string | null
+          email: string
+          fullName: string
           id?: number
           nationalID?: string | null
           nationality?: string | null
@@ -136,8 +136,8 @@ export type Database = {
         Update: {
           countryFlag?: string | null
           created_at?: string
-          email?: string | null
-          fullName?: string | null
+          email?: string
+          fullName?: string
           id?: number
           nationalID?: string | null
           nationality?: string | null

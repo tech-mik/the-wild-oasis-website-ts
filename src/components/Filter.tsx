@@ -1,5 +1,6 @@
 'use client'
 
+import { TCabinsFilter } from '@/types/cabins'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 export default function Filter() {
@@ -7,9 +8,9 @@ export default function Filter() {
   const router = useRouter()
   const pathname = usePathname()
 
-  const activeFilter = searchParams.get('capacity') ?? 'all'
+  const activeFilter = (searchParams.get('capacity') as TCabinsFilter) ?? 'all'
 
-  function handleFilter(filter) {
+  function handleFilter(filter: TCabinsFilter) {
     const params = new URLSearchParams(searchParams)
     params.set('capacity', filter)
     router.replace(`${pathname}?${params.toString()}`, { scroll: false })
@@ -48,7 +49,19 @@ export default function Filter() {
   )
 }
 
-function Button({ filter, handleFilter, activeFilter, children }) {
+interface IButtonProps {
+  filter: TCabinsFilter
+  handleFilter: (filter: TCabinsFilter) => void
+  activeFilter: TCabinsFilter
+  children: React.ReactNode
+}
+
+function Button({
+  filter,
+  handleFilter,
+  activeFilter,
+  children,
+}: IButtonProps) {
   return (
     <button
       className={`px-5 py-2 hover:bg-primary-700 ${

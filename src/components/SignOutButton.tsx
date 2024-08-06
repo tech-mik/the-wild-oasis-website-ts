@@ -4,7 +4,10 @@ import { useAuth } from '@/context/AuthContext'
 import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/solid'
 
 function SignOutButton() {
-  const { signOut } = useAuth()
+  const session = useAuth()
+  if (!session) throw new Error('You must be logged in to sign out')
+
+  const { signOut } = session
 
   return (
     <button

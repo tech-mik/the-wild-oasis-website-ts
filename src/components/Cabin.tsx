@@ -1,8 +1,13 @@
 import { EyeSlashIcon, MapPinIcon, UsersIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import TextExpander from './TextExpander'
+import { Database } from '@/types/supabase'
 
-export default function Cabin({ cabin }) {
+export default function Cabin({
+  cabin,
+}: {
+  cabin: Database['public']['Tables']['cabins']['Row']
+}) {
   const { name, maxCapacity, image, description } = cabin
 
   return (

@@ -1,8 +1,16 @@
+import { Database } from '@/types/supabase'
 import { UsersIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 
-function CabinCard({ cabin }) {
+interface ICabinCardProps {
+  cabin: Pick<
+    Database['public']['Tables']['cabins']['Row'],
+    'id' | 'name' | 'maxCapacity' | 'regularPrice' | 'discount' | 'image'
+  >
+}
+
+function CabinCard({ cabin }: ICabinCardProps) {
   const { id, name, maxCapacity, regularPrice, discount, image } = cabin
 
   return (
@@ -30,7 +38,7 @@ function CabinCard({ cabin }) {
           </div>
 
           <p className='flex gap-3 justify-end items-baseline'>
-            {discount > 0 ? (
+            {discount && discount > 0 ? (
               <>
                 <span className='text-3xl font-[350]'>
                   ${regularPrice - discount}

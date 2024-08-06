@@ -12,6 +12,7 @@ interface ICabinProps {
 
 export async function generateMetadata({ params: { cabinId } }: ICabinProps) {
   const cabin = await getCabin(Number(cabinId))
+  if (!cabin) throw new Error('Cabin not found')
 
   return {
     title: `Cabin ${cabin.name}`,
@@ -27,6 +28,8 @@ export async function generateStaticParams() {
 
 export default async function Page({ params: { cabinId } }: ICabinProps) {
   const cabin = await getCabin(Number(cabinId))
+
+  if (!cabin) throw new Error('Cabin not found')
 
   return (
     <div className='max-w-6xl mx-auto mt-8'>

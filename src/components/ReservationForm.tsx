@@ -4,13 +4,32 @@ import Image from 'next/image'
 import { useReservation } from '../context/ReservationContext'
 import { differenceInDays } from 'date-fns'
 import { createBooking } from '@/lib/actions'
+import { Database } from '@/types/supabase'
+import { Session, User } from 'next-auth'
 
-function ReservationForm({ cabin, user }) {
+interface IReservarionForm {
+  cabin: Database['public']['Tables']['cabins']['Row']
+  user: User
+}
+
+function ReservationForm({ cabin, user }: IReservarionForm) {
   const { range } = useReservation()
   const { id: cabinId, maxCapacity, regularPrice, discount } = cabin
   const { from: startDate, to: endDate } = range
-  const numNights = differenceInDays(endDate, startDate)
-  const cabinPrice = +numNights * (regularPrice - discount)
+
+  let numNights
+  if (startDate && endDate) {
+    numNights = differenceInDays(new Date(endDate), new Date(startDate))
+  } else {
+    numNights = 0
+  }
+
+  let cabinPrice
+  if (discount) {
+    cabinPrice = regularPrice - (regularPrice * discount) / 100
+  } else {
+    cabinPrice = regularPrice
+  }
 
   const { resetRange } = useReservation()
 
@@ -33,8 +52,8 @@ function ReservationForm({ cabin, user }) {
             height={32}
             referrerPolicy='no-referrer'
             className='h-8 rounded-full'
-            src={user.image}
-            alt={user.name}
+            src={user?.image || '/user.svg'}
+            alt={user?.name || 'User profile picture'}
           />
           <p>{user.name}</p>
         </div>

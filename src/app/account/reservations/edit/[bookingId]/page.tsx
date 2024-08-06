@@ -12,7 +12,7 @@ export default async function Page({
   params: { bookingId },
 }: IBookingPageParams) {
   const { cabinId, observations, numGuests } = await getBooking(bookingId)
-  const { maxCapacity } = await getCabin(cabinId)
+  const { maxCapacity } = (await getCabin(cabinId)) || { maxCapacity: 0 }
 
   return (
     <div>
@@ -27,7 +27,7 @@ export default async function Page({
         <div className='space-y-2'>
           <label htmlFor='numGuests'>How many guests?</label>
           <select
-            defaultValue={numGuests}
+            defaultValue={numGuests as number}
             name='numGuests'
             id='numGuests'
             className='px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm'
@@ -35,8 +35,11 @@ export default async function Page({
             <option value='' key=''>
               Select number of guests...
             </option>
-            {Array.from({ length: maxCapacity }, (_, i) => i + 1).map((x) => (
-              <option value={x} key={x}>
+            {Array.from(
+              { length: maxCapacity } as { length: number },
+              (_, i) => i + 1,
+            ).map((x) => (
+              <option value={x as number} key={x as number}>
                 {x} {x === 1 ? 'guest' : 'guests'}
               </option>
             ))}
@@ -48,7 +51,7 @@ export default async function Page({
             Anything we should know about your stay?
           </label>
           <textarea
-            defaultValue={observations}
+            defaultValue={observations as string}
             name='observations'
             className='px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm'
           />

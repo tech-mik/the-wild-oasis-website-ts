@@ -3,9 +3,23 @@
 import { deleteBooking } from '@/lib/actions'
 import { useOptimistic, useState } from 'react'
 import ReservationCard from './ReservationCard'
+import { Database } from '@/types/supabase'
 
-export default function ReservationList({ bookings }) {
-  const [error, setError] = useState(null)
+interface Cabin {
+  name: string
+  image: string
+}
+
+type ExtendedBooking = Database['public']['Tables']['bookings']['Row'] & {
+  cabins: Cabin
+}
+
+interface IReservationListProps {
+  bookings: ExtendedBooking[]
+}
+
+export default function ReservationList({ bookings }: IReservationListProps) {
+  const [error, setError] = useState<string | null>(null)
   const [optimisticBookings, optimisticDelete] = useOptimistic(
     bookings,
     (curBookings, bookingId) => {
@@ -13,14 +27,17 @@ export default function ReservationList({ bookings }) {
     },
   )
 
-  async function handleDelete(bookingId) {
+  async function handleDelete(bookingId: number) {
     optimisticDelete(bookingId)
 
     try {
       await deleteBooking(bookingId)
     } catch (err) {
       console.error('Error occurred during deletion:', err)
-      setError(err.message)
+
+      if (err instanceof Error) {
+        setError(err?.message)
+      }
     }
   }
 

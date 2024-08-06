@@ -3,9 +3,18 @@
 import { TrashIcon } from '@heroicons/react/24/solid'
 import { useState, useTransition } from 'react'
 import SpinnerMini from './SpinnerMini'
-import { wait } from '@/lib/helpers'
 
-function DeleteReservation({ bookingId, onDelete, resetError }) {
+interface IDeleteReservationProps {
+  bookingId: number
+  onDelete: (bookingId: number) => Promise<void>
+  resetError: () => void
+}
+
+function DeleteReservation({
+  bookingId,
+  onDelete,
+  resetError,
+}: IDeleteReservationProps) {
   const [isPending, startTransition] = useTransition()
   const [msg, setMsg] = useState(null)
 
